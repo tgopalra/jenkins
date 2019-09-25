@@ -9,7 +9,7 @@ The build is based on [internavenue/docker-centos-base][docker-centos-base].
 ## Included packages (and their dependencies)
 
 * Jenkins
-* OpenJDK 1.7
+* OpenJDK 1.8
 
 ## Image Creation
 
@@ -49,28 +49,6 @@ web1`.
 
 ``` shell
 $ mkdir -p /srv/docker/lon-dev-web
-$ docker run -d -name="web1" \
-             -p 127.0.0.1:80:80 \
-             -v /srv/docker/lon-dev-web:/srv/www \
-             -e USER="super" \
-             -e PASS="Whatz03v3r" \
-             internavenue/nginx
-```
-
-Alternately, you can run the following if you have *GNU Make* installed...
-
-``` shell
-$ make run
-```
-
-You can also specify a custom port to bind to on the host, a custom web root
-directory, and the superuser username and password on the host like so:
-
-``` shell
-$ sudo mkdir -p /srv/docker/lon-dev-web
-$ make run PORT=127.0.0.1:8080 \
-           DATA_DIR=/my/spec/data/dir \
-           USER=super \
-           PASS=Whatz03v3r
+$ docker run -d --name="jenkin-container" -p 10.250.6.7:80:8080 -v /srv/docker/lon-dev-web:/srv/www -e USER="jenkins" -e PASS="jenkins" jenkins
 ```
 
