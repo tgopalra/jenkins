@@ -1,13 +1,13 @@
-#FROM internavenue/centos-base:centos7
 FROM centos:7
 
 MAINTAINER PREM KUMAR
+RUN yum -y install wget openssh-server openssh initscripts
 
 RUN wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
 RUN rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 
 RUN yum -y install \
-  java-1.7.0-openjdk \
+  java-1.8.0-openjdk-devel\
   jenkins
 
 # Clean up YUM when done.
@@ -23,10 +23,6 @@ RUN chmod +x /etc/init.d/jenkins
 
 EXPOSE 8080 22 80
 
-# Vagrant directory can be used for Vagrant-based scenarios,
-# but you can use it for general filesystem-share with the
-# host, e.g. you can place your Puppet manifests and execute
-# puppet apply inside the container.
 VOLUME ["/vagrant", "/run", "/var/lib/jenkins", "/var/log" "/var/cache/jenkins/war]
 
 # Kicking in
