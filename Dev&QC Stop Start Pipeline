@@ -1,12 +1,10 @@
 pipeline {
     agent any
-
     parameters {
         choice(choices: ['baente42lvd.apac.fadv.net', 'baente43lvd.apac.fadv.net'], description: 'Choose Server?', name: 'SERVER')
         choice(choices: ['All'], description: 'Choose Application?', name: 'APP')
         choice(choices: ['status','start','stop'], description: 'Choose Task?', name: 'TASK')
     }
-
     stages {
         stage("output") {
             steps {
@@ -15,68 +13,130 @@ pipeline {
                 echo "TASK: ${params.TASK}"
             }
         }
-        stage("Application Stop") {
+        stage("Application Start Node1") {
             when {
-                expression { "${params.TASK}" == 'stop' }
+                expression { "${params.TASK}" == 'start' && "${params.SERVER}" == 'baente42lvd.apac.fadv.net'}
             }
             steps {
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash 	apdaa	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDaa.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	apdawpsj    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	apdbwpsj    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	apdrch	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDrch.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	apdrchbg    /bin/bash -c	jboss-5.1.1-lnss/bin/startDrchbg.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dabused	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDabused.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dacrms	    /bin/bash -c	tomcat/bin/startup.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dadgws	    /bin/bash -c	jboss-eap-6.2/bin/start_jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	daprws	    /bin/bash -c	tomcat/bin/startup.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dasesb	    /bin/bash -c	/ap/da/sesb/startjboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dasmb	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dassu	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	datmt	    /bin/bash -c	jboss-eap-6.2/bin/startjboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dcs	        /bin/bash -c	jboss-5.1.1-lnss/bin/startDcs.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dcsbg	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDcsbg.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dcsimg	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDcsimg.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dcsxml	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDcsxml.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dhdvc	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDhdvc.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dhdxml	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDhdxml.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	djesp	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDjesp.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dntmk	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dprfg	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dsfg	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDsfg.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dsslms	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"                           
-
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdaa /bin/bash -c jboss-5.1.1-lnss/bin/startDaa.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdawpsj /bin/bash -c jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdbwpsj /bin/bash -c jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdrch /bin/bash -c jboss-5.1.1-lnss/bin/startDrch.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdrchbg /bin/bash -c jboss-5.1.1-lnss/bin/startDrchbg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dabused /bin/bash -c jboss-5.1.1-lnss/bin/startDabused.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dacrms /bin/bash -c tomcat/bin/startup.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dadgws /bin/bash -c jboss-eap-6.2/bin/start_jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - daprws /bin/bash -c tomcat/bin/startup.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dasesb /bin/bash -c /ap/da/sesb/startjboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dasmb /bin/bash -c jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dassu /bin/bash -c jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - datmt /bin/bash -c jboss-eap-6.2/bin/startjboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dcs /bin/bash -c jboss-5.1.1-lnss/bin/startDcs.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dcsbg /bin/bash -c jboss-5.1.1-lnss/bin/startDcsbg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dcsimg /bin/bash -c jboss-5.1.1-lnss/bin/startDcsimg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dcsxml /bin/bash -c jboss-5.1.1-lnss/bin/startDcsxml.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dhdvc /bin/bash -c jboss-5.1.1-lnss/bin/startDhdvc.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dhdxml /bin/bash -c jboss-5.1.1-lnss/bin/startDhdxml.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - djesp /bin/bash -c jboss-5.1.1-lnss/bin/startDjesp.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dntmk /bin/bash -c jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dprfg /bin/bash -c jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dsfg /bin/bash -c jboss-5.1.1-lnss/bin/startDsfg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dsslms /bin/bash -c jboss-5.1.1-lnss/bin/start-jboss.sh"                           
             }
         }
-          
-        stage("Application Start") {
+
+        stage("Application Stop Node1") {
             when {
-                expression { "${params.TASK}" == 'start' }
+                expression { "${params.TASK}" == 'stop' && "${params.SERVER}" == 'baente42lvd.apac.fadv.net'}
             }
             steps {
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	apdaa       /bin/bash -c	jboss-5.1.1-lnss/bin/startDaa.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	apdawpsj    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	apdbwpsj    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	apdrch	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDrch.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dabused	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDabused.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dacrms	    /bin/bash -c	tomcat/bin/startup.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dadgws	    /bin/bash -c	jboss-eap-6.2/bin/start_jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	daprws	    /bin/bash -c	tomcat/bin/startup.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dasesb	    /bin/bash -c	/ap/da/sesbstartjboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dasmb	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dassu	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dcs  	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDcs.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dcsimg	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDcsimg.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dcsxml	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDcsxml.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dhdbg	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDhdbg.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dhdvc	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDhdvc.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dhdxml	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDhdxml.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	djesp	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDjesp.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dntmk	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dprfg	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dprtrk	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dsfg	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDsfg.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dsoff	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
-                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} 'su --shell /bin/bash	dvss	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDvss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdaa /bin/bash -c jboss-5.1.1-lnss/bin/stopDaa.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdawpsj /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdbwpsj /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdrch /bin/bash -c jboss-5.1.1-lnss/bin/stopDrch.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdrchbg /bin/bash -c jboss-5.1.1-lnss/bin/stopDrchbg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dabused /bin/bash -c jboss-5.1.1-lnss/bin/stopDabused.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dacrms /bin/bash -c tomcat/bin/shutdown.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dadgws /bin/bash -c jboss-eap-6.2/bin/stop_jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - daprws /bin/bash -c tomcat/bin/shutdown.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dasesb /bin/bash -c /ap/da/sesb/stopjboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dasmb /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dassu /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - datmt /bin/bash -c jboss-eap-6.2/bin/stopjboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dcs  /bin/bash -c jboss-5.1.1-lnss/bin/stopDcs.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dcsbg /bin/bash -c jboss-5.1.1-lnss/bin/stopDcsbg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dcsimg /bin/bash -c jboss-5.1.1-lnss/bin/stopDcsimg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dcsxml /bin/bash -c jboss-5.1.1-lnss/bin/stopDcsxml.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dhdvc /bin/bash -c jboss-5.1.1-lnss/bin/stopDhdvc.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dhdxml /bin/bash -c jboss-5.1.1-lnss/bin/stopDhdxml.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - djesp /bin/bash -c jboss-5.1.1-lnss/bin/stopDjesp.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dntmk /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dprfg /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dsfg /bin/bash -c jboss-5.1.1-lnss/bin/stopDsfg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dsslms /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+            }
+        }
+        stage("Application Start Node 2") {
+            when {
+                expression { "${params.TASK}" == 'start' && "${params.SERVER}" == 'baente43lvd.apac.fadv.net'}
+            }
+            steps {
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	apdaa       /bin/bash -c	jboss-5.1.1-lnss/bin/startDaa.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	apdawpsj    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	apdbwpsj    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	apdrch	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDrch.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dabused	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDabused.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dacrms	    /bin/bash -c	tomcat/bin/startup.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dadgws	    /bin/bash -c	jboss-eap-6.2/bin/start_jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	daprws	    /bin/bash -c	tomcat/bin/startup.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dasesb	    /bin/bash -c	/ap/da/sesbstartjboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dasmb	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dassu	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dcs  	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDcs.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dcsimg	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDcsimg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dcsxml	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDcsxml.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dhdbg	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDhdbg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dhdvc	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDhdvc.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dhdxml	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDhdxml.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	djesp	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDjesp.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dntmk	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dprfg	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dprtrk	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dsfg	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDsfg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dsoff	    /bin/bash -c	jboss-5.1.1-lnss/bin/start-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash	dvss	    /bin/bash -c	jboss-5.1.1-lnss/bin/startDvss.sh"
+            }
+        }
+
+        stage("Application Stop Node 2") {
+            when {
+                expression { "${params.TASK}" == 'stop' && "${params.SERVER}" == 'baente43lvd.apac.fadv.net'}
+            }
+            steps {
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdaa /bin/bash -c jboss-5.1.1-lnss/bin/stopDaa.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdawpsj /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdbwpsj /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - apdrch /bin/bash -c jboss-5.1.1-lnss/bin/stopDrch.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dabused /bin/bash -c jboss-5.1.1-lnss/bin/stopDabused.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dacrms /bin/bash -c tomcat/bin/shutdown.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dadgws /bin/bash -c jboss-eap-6.2/bin/stop_jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - daprws /bin/bash -c tomcat/bin/shutdown.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dasesb /bin/bash -c /ap/da/sesbstopjboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dasmb /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dassu /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dcs /bin/bash -c jboss-5.1.1-lnss/bin/stopDcs.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dcsimg /bin/bash -c jboss-5.1.1-lnss/bin/stopDcsimg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dcsxml /bin/bash -c jboss-5.1.1-lnss/bin/stopDcsxml.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dhdbg /bin/bash -c jboss-5.1.1-lnss/bin/stopDhdbg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dhdvc /bin/bash -c jboss-5.1.1-lnss/bin/stopDhdvc.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dhdxml /bin/bash -c jboss-5.1.1-lnss/bin/stopDhdxml.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - djesp /bin/bash -c jboss-5.1.1-lnss/bin/stopDjesp.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dntmk /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dprfg /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dprtrk /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dsfg /bin/bash -c jboss-5.1.1-lnss/bin/stopDsfg.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dsoff /bin/bash -c jboss-5.1.1-lnss/bin/stop-jboss.sh"
+                sh "ssh -o StrictHostKeyChecking=no -t -t root@${params.SERVER} su --shell /bin/bash - dvss /bin/bash -c jboss-5.1.1-lnss/bin/stopDvss.sh"
             }
         }
 
@@ -89,7 +149,6 @@ pipeline {
                     def URL = ['daa1','drch1','dabused1','dadgws1','daprws1','dasesb1','dasmb1','dassu1','datmt1','dcs1','dcsbg','dcsimg1','dcsxml1','dhdvc1','dhdxml1','djesp1','dntmk1','dprfg1','dsfg1','dsslms1']
                         for (int i = 0; i < URL.size(); ++i) {
                         def response = httpRequest "http://${URL[i]}:8080/"
-                        println("Status:${URL[i]}"+response.status)
                     }
                 }
                                
@@ -105,7 +164,6 @@ pipeline {
                     def URL = ['daa2','dbwpsj2','drch2','dabused2','dadgws2','daprws2','dasesb2','dasmb2','dassu2','dcs2','dcsimg2','dcsxml2','dhdbg','dhdvc2','dhdxml2','djesp2','dntmk2','dprfg2','dprtrk','dsfg2','dsoff','dvss']
                         for (int i = 0; i < URL.size(); ++i) {
                         def response = httpRequest "http://${URL[i]}:8080/"
-                        println("Status:${URL[i]}"+response.status)
                     }
                 }
                                
