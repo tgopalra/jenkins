@@ -3,8 +3,8 @@ FROM centos:7
 MAINTAINER PREM KUMAR
 RUN yum -y install wget openssh-server openssh initscripts
 
-RUN wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
-RUN rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
+RUN wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo --no-check-certificate
+RUN rpm --import https://pkg.jenkins.io/redhat/jenkins.io-2023.key
 
 RUN yum -y install \
   java-1.8.0-openjdk-devel\
@@ -23,7 +23,7 @@ RUN chmod +x /etc/init.d/jenkins
 
 EXPOSE 8080 22 80
 
-VOLUME ["/vagrant", "/run", "/var/lib/jenkins", "/var/log" "/var/cache/jenkins/war]
+VOLUME ["/vagrant", "/run", "/var/lib/jenkins", "/var/log" "/var/cache/jenkins/war"]
 
 # Kicking in
 CMD ["/scripts/start.sh"]
